@@ -1,5 +1,10 @@
 <template>
   <section>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+    </el-breadcrumb>
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true">
@@ -424,7 +429,10 @@ export default {
 .el-dialog--small {
   width: 70%;
 }
-
+.el-breadcrumb {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
 /* 把表单label文字首尾对齐 */
 .el-form-item label:after {
   content: '';

@@ -26,56 +26,31 @@
           <el-row class="tac">
             <el-col>
               <el-menu
-                default-active="2"
+                router
+                :default-active="this.$router.path"
                 class="el-menu-vertical-demo"
                 background-color="#4E73DF"
                 text-color="#fff"
                 active-text-color="#ffd04b"
               >
                 <hr class="sidebar-divider my-0" />
-                <el-submenu index="1">
+                <el-submenu :index="item.id+''" v-for="item in menulist" :key="item.id">
                   <template slot="title">
-                    <i class="el-icon-s-custom"></i>
-                    <span>用户管理</span>
+                    <i :class="icons[item.id]"></i>
+                    <span>{{item.authName}}</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="1-1">用户列表</el-menu-item>
-                    <el-menu-item index="1-2">选项2</el-menu-item>
+                    <el-menu-item
+                      :index="subItem.path"
+                      v-for="subItem in item.children"
+                      :key="subItem.id"
+                    > 
+                      <i class="el-icon-set-up"></i>
+                      <span>{{subItem.authName}}</span>
+                    </el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
                 <hr class="sidebar-divider my-0" />
-                <el-submenu index="2">
-                  <template slot="title">
-                    <i class="el-icon-s-help"></i>
-                    <span>设备管理</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item index="1-1">设备列表</el-menu-item>
-                    <el-menu-item index="1-2">选项2</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
-                <hr class="sidebar-divider my-0" />
-                <el-submenu index="3">
-                  <template slot="title">
-                    <i class="el-icon-s-help"></i>
-                    <span>设备管理</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item index="1-1">设备列表</el-menu-item>
-                    <el-menu-item index="1-2">选项2</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
-                <hr class="sidebar-divider my-0" />
-                <el-submenu index="4">
-                  <template slot="title">
-                    <i class="el-icon-s-help"></i>
-                    <span>设备管理</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item index="1-1">设备列表</el-menu-item>
-                    <el-menu-item index="1-2">选项2</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
               </el-menu>
             </el-col>
           </el-row>
@@ -91,12 +66,43 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      menulist: [
+        {
+          id: 1,
+          authName: '用户管理',
+          children: [
+            {
+              id: 1,
+              authName: '用户列表',
+              path: '/userlist'
+            }
+          ]
+        },
+        {
+          id: 2,
+          authName: '设备管理',
+          children: [
+            {
+              id: 2,
+              authName: '设备列表',
+              path: '/shebei'
+            }
+          ]
+        }
+      ],
+      icons: 
+        {
+          '1': 'el-icon-s-custom',
+          '2': 'el-icon-bangzhu'
+        }
+      
+    }
   },
   methods: {
     loginOut() {
       this.$router.push('/')
-    },
+    }
   }
 }
 </script>
@@ -124,7 +130,7 @@ export default {
 }
 .el-row {
   height: 100%;
-  background-color: #4E73DF;
+  background-color: #4e73df;
 }
 .el-header {
   display: flex;
@@ -142,8 +148,8 @@ export default {
     background-color: #4e73df;
     font-size: 30px;
     img {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
     }
   }
   .chathead {
@@ -156,10 +162,10 @@ export default {
 }
 .sidebar-divider {
   border: none;
-  border-top: 1px solid rgba(255,255,255,.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   margin: 0 1.5rem 1rem;
 }
 .my-0 {
-    margin-bottom: 0!important;
+  margin-bottom: 0 !important;
 }
 </style>

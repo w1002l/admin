@@ -21,10 +21,12 @@ Vue.use(VueRouter)
       children: [
         {
           path: '/userlist',
+          name: '用户列表',
           component: userList
         },
         {
           path: '/shebei',
+          name: '设备列表',
           component: sheBei
         }
       ]
