@@ -7,15 +7,15 @@
       label-width="40px"
       class="login-form"
     >
-      <el-form-item label="账户" prop="name">
-        <el-input v-model="loginFormData.name" prefix-icon="el-icon-user"></el-input>
+      <el-form-item label="账户" prop="userCode">
+        <el-input v-model="loginFormData.userCode" prefix-icon="el-icon-user"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input type="password" v-model="loginFormData.password" prefix-icon="el-icon-lock"></el-input>
       </el-form-item>
       <el-form-item class="btn-group">
         <el-button type="info" @click="resetLoginForm">重置</el-button>
-        <el-button type="primary" @click="onSubmit">登录</el-button>
+        <el-button type="primary" @click="login">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -26,11 +26,11 @@ export default {
   data() {
     return {
       loginFormData: {
-        name: 'dzq',
+        userCode: 'phs',
         password: '123456'
       },
       loginFormRules: {
-        name: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+        userCode: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
     }
@@ -39,8 +39,33 @@ export default {
     resetLoginForm() {
       this.$refs.loginFormRef.resetFields()
     },
-    onSubmit() {
-      console.log('submit!')
+    login() {
+      this.$refs.loginFormRef.validate(async vaild => {
+        if (vaild) {
+          var formData = new FormData()
+          formData.append('userCode', 'phs')
+          formData.append('password', '123456')
+          await this.$axios.post('auth/login',formData).then(res => {
+            if (res.status == 200) {
+              console.log(res)
+
+              this.$message({
+                message: '登录成功',
+                type: 'success'
+              })
+              window.sessionStorage.setItem('token', res.data.data.token)
+              this.$router.push('/home')
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
+            }
+          })
+        } else {
+          return false
+        }
+      })
     }
   }
 }
