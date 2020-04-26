@@ -6,6 +6,7 @@
           <img src="../assets/logo.png" alt />
           <span>用户管理系统</span>
         </div>
+        <el-button type="primary" :icon="isCollapse? 'el-icon-d-arrow-right' : 'el-icon-d-arrow-left'"  circle @click="toggleCollapse"></el-button>
         <div class="chathead">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
@@ -22,7 +23,7 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside width="250px">
+        <el-aside :width="isCollapse? '64px' : '250px'">
           <el-row class="tac">
             <el-col>
               <el-menu
@@ -32,6 +33,8 @@
                 background-color="#4E73DF"
                 text-color="#fff"
                 active-text-color="#ffd04b"
+                :collapse="isCollapse"
+                :collapse-transition="false"
               >
                 <hr class="sidebar-divider my-0" />
                 <el-submenu :index="item.id+''" v-for="item in menulist" :key="item.id">
@@ -67,6 +70,7 @@
 export default {
   data() {
     return {
+      isCollapse: false,
       menulist: [
         {
           id: 1,
@@ -102,6 +106,9 @@ export default {
   methods: {
     loginOut() {
       this.$router.push('/')
+    },
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse
     }
   }
 }
@@ -115,6 +122,11 @@ export default {
   right: 0;
   top: 0;
   height: 100%;
+}
+.el-button.is-circle {
+  position: absolute;
+  top: 10px;
+  left: 260px;
 }
 .el-icon-caret-bottom {
   vertical-align: 12px;

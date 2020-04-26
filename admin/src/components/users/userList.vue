@@ -107,7 +107,7 @@
     </el-dialog>
 
     <!-- 查看用户详情 -->
-    <el-dialog title="用户详情" :visible.sync="dialogTableVisible">
+    <el-dialog title="用户详情" :visible.sync="dialogTableVisible" style="width: 100%">
       <el-table :data="userDetail" border stripe>
         <el-table-column prop="customerName" label="公司名称" :resizable="false"></el-table-column>
         <el-table-column prop="userCode" label="账号" :resizable="false"></el-table-column>
@@ -127,7 +127,7 @@
     <!-- 修改用户对话框 -->
     <el-dialog
       title="修改信息"
-      v-model="reviseFormVisible"
+      :visible.sync="reviseFormVisible"
       :close-on-click-modal="false"
       style="width: 80%; margin: 0 auto;"
     >
