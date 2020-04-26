@@ -105,6 +105,7 @@ export default {
   },
   methods: {
     loginOut() {
+      window.sessionStorage.removeItem('token')
       this.$router.push('/')
     },
     toggleCollapse() {
