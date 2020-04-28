@@ -107,7 +107,7 @@
     </el-dialog>
 
     <!-- 查看用户详情 -->
-    <el-dialog title="用户详情" :visible.sync="dialogTableVisible" style="width: 100%">
+    <el-dialog title="用户详情" :visible.sync="dialogTableVisible">
       <el-table :data="userDetail" border stripe>
         <el-table-column prop="customerName" label="公司名称" :resizable="false"></el-table-column>
         <el-table-column prop="userCode" label="账号" :resizable="false"></el-table-column>
@@ -305,7 +305,7 @@ export default {
         customerCode: '',
         pwd: ''
       },
-      // 查询用户
+      // 获取用户数据要传的参数
       queryinfo: {
         customerCodes: 'K_KCZG_COM',
         pageNumer: 1,
@@ -425,13 +425,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 .el-dialog--small {
   width: 70%;
 }
 .el-breadcrumb {
-  font-size: 16px;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 /* 把表单label文字首尾对齐 */
 .el-form-item label:after {
