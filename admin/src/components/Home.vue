@@ -6,7 +6,12 @@
           <img src="../assets/logo.png" alt />
           <span>用户管理系统</span>
         </div>
-        <el-button type="primary" :icon="isCollapse? 'el-icon-d-arrow-right' : 'el-icon-d-arrow-left'"  circle @click="toggleCollapse"></el-button>
+        <el-button
+          type="primary"
+          :icon="isCollapse? 'el-icon-d-arrow-right' : 'el-icon-d-arrow-left'"
+          circle
+          @click="toggleCollapse"
+        ></el-button>
         <div class="chathead">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
@@ -30,9 +35,9 @@
                 router
                 :default-active="this.$router.path"
                 class="el-menu-vertical-demo"
-                background-color="#4E73DF"
+                background-color="#347DDC"
                 text-color="#fff"
-                active-text-color="#ffd04b"
+                active-text-color="#fff"
                 :collapse="isCollapse"
                 :collapse-transition="false"
               >
@@ -47,8 +52,8 @@
                       :index="subItem.path"
                       v-for="subItem in item.children"
                       :key="subItem.id"
-                    > 
-                      <i class="el-icon-set-up"></i>
+                    >
+                      <!-- <i class="el-icon-set-up"></i> -->
                       <span>{{subItem.authName}}</span>
                     </el-menu-item>
                   </el-menu-item-group>
@@ -95,12 +100,10 @@ export default {
           ]
         }
       ],
-      icons: 
-        {
-          '1': 'el-icon-s-custom',
-          '2': 'el-icon-bangzhu'
-        }
-      
+      icons: {
+        '1': 'el-icon-s-custom',
+        '2': 'el-icon-bangzhu'
+      }
     }
   },
   methods: {
@@ -124,32 +127,11 @@ export default {
   top: 0;
   height: 100%;
 }
-.el-button.is-circle {
-  position: absolute;
-  top: 10px;
-  left: 260px;
-}
-.el-icon-caret-bottom {
-  vertical-align: 12px;
-}
-.el-container {
-  height: 100%;
-}
-.el-aside {
-  height: 100%;
-}
-.el-menu {
-  border-right: 0;
-}
-.el-row {
-  height: 100%;
-  background-color: #4e73df;
-}
 .el-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 0;
+  padding-left: 0 !important;
   background-color: #fff;
   box-shadow: 0px 5px 10px #ddd;
   color: #fff;
@@ -158,7 +140,7 @@ export default {
     height: 100%;
     display: flex;
     align-items: center;
-    background-color: #4e73df;
+    background-color: #347ddc;
     font-size: 30px;
     img {
       width: 50px;
@@ -180,5 +162,42 @@ export default {
 }
 .my-0 {
   margin-bottom: 0 !important;
+}
+</style>
+<style lang="less">
+  .el-button.is-circle {
+  position: absolute;
+  top: 10px;
+  left: 260px;
+}
+.el-icon-caret-bottom {
+  vertical-align: 12px;
+}
+.el-submenu__title i {
+  color: #fff !important;
+}
+.el-container {
+  height: 100%;
+}
+.el-aside {
+  height: 100%;
+}
+.el-menu {
+  border-right: 0 !important;
+}
+.el-row {
+  height: 100%;
+  background-color: #347ddc;
+}
+.el-menu-item:focus {
+  background-color: #1564cb !important;
+}
+.el-icon-arrow-down:before {
+  font-family: 'iconfont' !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: '\e6b5' !important;
 }
 </style>

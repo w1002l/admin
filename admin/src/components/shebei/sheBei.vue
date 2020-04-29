@@ -18,6 +18,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
+        &nbsp;
         <el-form-item>
           <el-button type="primary">查询</el-button>
         </el-form-item>
@@ -29,8 +30,6 @@
     <!-- 设备列表 -->
     <el-table :data="devicelist" stripe border>
       <el-table-column type="index" :resizable="false"></el-table-column>
-      <el-table-column prop="customerCode" label="公司编号"></el-table-column>
-      <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="name" label="设备名称"></el-table-column>
       <el-table-column prop="deviceCode" label="设备编号"></el-table-column>
       <el-table-column prop="type" label="设备类型"></el-table-column>
@@ -116,19 +115,19 @@ export default {
   data() {
     return {
       devicelist: [], //设备列表
-			dialogTableVisible: false, // 控制查看页面是否显示
-			dialogVisible: false, // 控制添加页面是否显示
-			deviceDetail: [], // 存放单个设备数据
-			formLabelWidth: '80px',
+      dialogTableVisible: false, // 控制查看页面是否显示
+      dialogVisible: false, // 控制添加页面是否显示
+      deviceDetail: [], // 存放单个设备数据
+      formLabelWidth: '80px',
       // 获取设备要传的参数
       queryinfo: {
         customerCodes: 'K_KCZG_COM',
         pageNumer: 1,
         pageSize: 12
       },
-			total: 0, // 数据总条数
-			addDeviceFormRules: {}, // 添加设备规则校验
-			addDevice: {},
+      total: 0, // 数据总条数
+      addDeviceFormRules: {}, // 添加设备规则校验
+      addDevice: {},
       options: [
         {
           value: '1',
@@ -183,15 +182,13 @@ export default {
       this.deviceDetail.unshift(userinfo)
       // 让数组元素始终保持一个
       this.deviceDetail.length = 1
-		},
-		// 关闭添加设备对话框清空内容
+    },
+    // 关闭添加设备对话框清空内容
     addDialogClosed() {
       this.$refs.addDeviceFormRef.resetFields()
-		},
-		// 添加设备点击提交函数
-		addDevices() {
-			
-		}
+    },
+    // 添加设备点击提交函数
+    addDevices() {}
   }
 }
 </script>

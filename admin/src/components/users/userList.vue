@@ -19,11 +19,12 @@
             :value="item.value"
           ></el-option>
         </el-select>
+        &nbsp;
         <el-form-item>
           <el-button type="primary" @click="searchUser">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="dialogVisible = true">新增</el-button>
+          <el-button type="primary" @click="dialogVisible = true">添加成员</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -114,7 +115,7 @@
         <el-table-column prop="pwd" label="密码" :resizable="false"></el-table-column>
         <el-table-column prop="name" label="姓名" :resizable="false"></el-table-column>
         <el-table-column prop="roleName" label="角色" :resizable="false"></el-table-column>
-        <el-table-column prop="role" label="角色编号" :resizable="false"></el-table-column>
+        <el-table-column prop="id" label="角色ID" :resizable="false"></el-table-column>
         <el-table-column prop="createTime" label="创建时间">
           <template v-slot="scope">{{ scope.row.createTime | dateFormat }}</template>
         </el-table-column>
@@ -131,13 +132,27 @@
       :close-on-click-modal="false"
       style="width: 80%; margin: 0 auto;"
     >
-      <el-form :model="modification" label-width="80px" ref="addForm">
-        <el-form-item label="公司编号" prop="customerCode">
-          <el-input v-model="modification.customerCode" auto-complete="off" placeholder="请输入公司编号"></el-input>
+      <el-form :model="personalDetail" label-width="80px" ref="addForm">
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="personalDetail.name" auto-complete="off" placeholder="请输入用户名"></el-input>
         </el-form-item>
-        <el-form-item label="公司角色" prop="role">
+        <el-form-item label="账号" prop="code">
+          <el-input v-model="personalDetail.userCode" auto-complete="off" placeholder="请设置账号"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pwd">
+          <el-input
+            type="password"
+            v-model="personalDetail.password"
+            auto-complete="off"
+            placeholder="请设置密码,长度20个字符以内"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="公司编号" prop="customerCode">
+          <el-input v-model="personalDetail.customerCode" auto-complete="off" placeholder="请输入公司编号"></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="role">
           <el-select
-            v-model="modification.roleName"
+            v-model="personalDetail.roleName"
             disabled
             placeholder="请选择"
             size="medium"
@@ -152,24 +167,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="modification.name" auto-complete="off" placeholder="请输入用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="账号" prop="code">
-          <el-input v-model="modification.userCode" auto-complete="off" placeholder="请设置账号"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="pwd">
-          <el-input
-            type="password"
-            v-model="modification.password"
-            auto-complete="off"
-            placeholder="请设置密码,长度20个字符以内"
-          ></el-input>
+        <el-form-item label="角色ID" prop="id">
+          <el-input v-model="personalDetail.id" ref="roleId" disabled></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="reviseFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="rewrite">提交</el-button>
+        <el-button type="primary" @click="rewrite()">提交</el-button>
       </div>
     </el-dialog>
   </section>
@@ -191,7 +195,6 @@ export default {
     return {
       userlist: [], // 存放用户列表数组
       userDetail: [], // 存放单个用户数据
-      // modification: {}, // 存放单个用户数据
       roleValue: '',
       addFormVisible: false, // 控制新增页面是否显示
       reviseFormVisible: false, // 控制编辑页面是否显示
@@ -297,7 +300,7 @@ export default {
         ]
       },
       // 修改用户
-      modification: {
+      personalDetail: {
         name: '',
         nickName: '',
         status: '',
@@ -389,22 +392,31 @@ export default {
     // 显示修改对话框
     showRevise(userinfo) {
       this.reviseFormVisible = true
-      this.modification = userinfo
+      this.personalDetail = userinfo
     },
     // 修改用户
-    async rewrite() {
-      const { data: res } = await this.$axios({
+    rewrite() {
+      this.$axios({
         method: 'POST',
         url: 'user/update',
-        params: this.modification,
+        params: {
+          id: this.$refs.roleId.value,
+          name: '',
+          nickName: '',
+          status: '',
+          lock: '',
+          customerCode: '',
+          pwd: ''
+        },
         headers: {
           'Content-Type': 'application/json',
           authorization: sessionStorage.getItem('token')
         }
+      }).then(res => {
+        if (res.status !== 200) {
+          this.$message.error('修改用户失败！')
+        }
       })
-      if (res.status !== 200) {
-        this.$message.error('修改用户失败！')
-      }
       this.$message.success('成功修改用户信息')
       this.reviseFormVisible = false
       this.getUserList()
