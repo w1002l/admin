@@ -18,8 +18,7 @@
             :label="item.value"
             :value="item.value"
           ></el-option>
-        </el-select>
-        &nbsp;
+        </el-select>&nbsp;
         <el-form-item>
           <el-button type="primary" @click="searchUser">查询</el-button>
         </el-form-item>
@@ -35,7 +34,7 @@
       <el-table-column prop="name" label="姓名" :resizable="false" width="120"></el-table-column>
       <el-table-column prop="customerName" label="公司名称" :resizable="false"></el-table-column>
       <el-table-column prop="roleName" label="角色" :resizable="false" width="150"></el-table-column>
-      <el-table-column prop="role" label="角色编码" :resizable="false" width="150"></el-table-column>
+      <el-table-column prop="role" label="角色代码" :resizable="false" width="150"></el-table-column>
       <el-table-column prop="vaildTime" label="有效时间" width="170px">
         <template v-slot="scope">{{ scope.row.vaildTime | dateFormat }}</template>
       </el-table-column>
@@ -133,11 +132,14 @@
       style="width: 80%; margin: 0 auto;"
     >
       <el-form :model="personalDetail" label-width="80px" ref="addForm">
-        <el-form-item label="姓名" prop="name">
+        <el-form-item label="姓名">
           <el-input v-model="personalDetail.name" auto-complete="off" placeholder="请输入用户名"></el-input>
         </el-form-item>
-        <el-form-item label="账号" prop="code">
-          <el-input v-model="personalDetail.userCode" auto-complete="off" placeholder="请设置账号"></el-input>
+         <el-form-item label="ID" prop="id">
+          <el-input v-model="personalDetail.id" ref="roleId" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="账号">
+          <el-input v-model="personalDetail.userCode" auto-complete="off" disabled placeholder="请设置账号"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
           <el-input
@@ -153,7 +155,6 @@
         <el-form-item label="角色" prop="role">
           <el-select
             v-model="personalDetail.roleName"
-            disabled
             placeholder="请选择"
             size="medium"
             style="width: 100%;"
@@ -167,13 +168,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="角色ID" prop="id">
-          <el-input v-model="personalDetail.id" ref="roleId" disabled></el-input>
-        </el-form-item>
+       
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="reviseFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="rewrite()">提交</el-button>
+        <el-button type="primary" @click="rewrite">提交</el-button>
       </div>
     </el-dialog>
   </section>
@@ -301,12 +300,15 @@ export default {
       },
       // 修改用户
       personalDetail: {
-        name: '',
-        nickName: '',
-        status: '',
-        lock: '',
-        customerCode: '',
-        pwd: ''
+        id: 15,
+        // role: '2',
+        // name: '',
+        // nickName: '',
+        // status: '',
+        // lock: '',
+        userCode: 'dqc',
+        // customerCode: 'K_KCZG_COM',
+        // pwd: ''
       },
       // 获取用户数据要传的参数
       queryinfo: {
@@ -399,15 +401,7 @@ export default {
       this.$axios({
         method: 'POST',
         url: 'user/update',
-        params: {
-          id: this.$refs.roleId.value,
-          name: '',
-          nickName: '',
-          status: '',
-          lock: '',
-          customerCode: '',
-          pwd: ''
-        },
+        params: this.personalDetail,
         headers: {
           'Content-Type': 'application/json',
           authorization: sessionStorage.getItem('token')
@@ -437,10 +431,10 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.el-dialog--small {
-  width: 70%;
-}
+<style lang="less">
+// .el-dialog--small {
+//   width: 70%;
+// }
 .el-breadcrumb {
   margin: 10px 0;
 }
@@ -451,7 +445,7 @@ export default {
   width: 100%;
 }
 .el-form-item__label {
-  text-align: justify;
+  text-align: justif;
   height: 50px;
 }
 
