@@ -1,6 +1,7 @@
 <template>
   <div id="container">
     <el-container>
+      <!-- 头部 -->
       <el-header>
         <div class="text">
           <img src="../assets/logo.png" alt />
@@ -27,17 +28,20 @@
           </el-dropdown>
         </div>
       </el-header>
+      <!-- 头部 end -->
       <el-container>
+        <!-- 侧边栏 -->
         <el-aside :width="isCollapse? '64px' : '250px'">
           <el-row class="tac">
             <el-col>
               <el-menu
                 router
-                :default-active="this.$router.path"
+                unique-opened
+                :default-active="$route.path"
                 class="el-menu-vertical-demo"
                 background-color="#347DDC"
                 text-color="#fff"
-                active-text-color="#fff"
+                active-text-color="#ffd04b"
                 :collapse="isCollapse"
                 :collapse-transition="false"
               >
@@ -63,9 +67,12 @@
             </el-col>
           </el-row>
         </el-aside>
+        <!-- 侧边栏 end -->
+        <!-- 主体 -->
         <el-main>
           <router-view></router-view>
         </el-main>
+        <!-- 主体 end -->
       </el-container>
     </el-container>
   </div>

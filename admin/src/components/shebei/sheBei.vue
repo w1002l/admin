@@ -17,8 +17,7 @@
             :label="item.label"
             :value="item.value"
           ></el-option>
-        </el-select>
-        &nbsp;
+        </el-select>&nbsp;
         <el-form-item>
           <el-button type="primary">查询</el-button>
         </el-form-item>
@@ -78,29 +77,58 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+    <!-- 修改设备对话框 -->
+    <el-dialog
+      title="修改设备信息"
+      :visible.sync="reviseFormVisible"
+      :close-on-click-modal="false"
+      style="width: 80%; margin: 0 auto;"
+    >
+      <el-form :model="equipmentDetail" label-width="80px" ref="addForm">
+        <el-form-item label="公司编号">
+          <el-input v-model="equipmentDetail.customerCode" auto-complete="off" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="ID" prop="id">
+          <el-input v-model="equipmentDetail.id" ref="roleId" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="设备名称">
+          <el-input v-model="equipmentDetail.name" auto-complete="off" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="设备编号">
+          <el-input v-model="equipmentDetail.deviceCode" ref="roleId" disabled></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="reviseFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="rewrite">提交</el-button>
+      </div>
+    </el-dialog>
     <!-- 注册(添加)设备 -->
-    <el-dialog title="添加用户" :visible.sync="dialogVisible" @close="addDialogClosed">
+    <el-dialog title="添加设备" :visible.sync="dialogVisible" @close="addDialogClosed">
       <el-form :model="addDevice" :rules="addDeviceFormRules" ref="addDeviceFormRef">
-        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
+        <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name">
           <el-input v-model="addDevice.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="账号" :label-width="formLabelWidth" prop="userCode">
-          <el-input v-model="addDevice.userCode" auto-complete="off"></el-input>
+        <el-form-item label="设备编号" :label-width="formLabelWidth" prop="deviceCode">
+          <el-input v-model="addDevice.deviceCode" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth" prop="pwd">
-          <el-input v-model="addDevice.pwd" type="password"></el-input>
+       <el-form-item label="设备类型" :label-width="formLabelWidth" prop="type">
+          <el-input v-model="addDevice.type" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" :label-width="formLabelWidth" prop="checkPwd">
-          <el-input v-model="addDevice.checkPwd" type="password"></el-input>
+       <el-form-item label="网络情况" :label-width="formLabelWidth" prop="network">
+          <el-input v-model="addDevice.network" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="公司名称" :label-width="formLabelWidth" prop="customerName">
-          <el-input v-model="addDevice.customerName" auto-complete="off"></el-input>
+        <el-form-item label="ip地址" :label-width="formLabelWidth" prop="ip">
+          <el-input v-model="addDevice.ip" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="有效时间" :label-width="formLabelWidth">
-          <el-input v-model="addDevice.vaildTime" auto-complete="off"></el-input>
+       <el-form-item label="所在位置" :label-width="formLabelWidth" prop="address">
+          <el-input v-model="addDevice.address" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="是否锁定" :label-width="formLabelWidth">
-          <el-switch v-model="addDevice.lock"></el-switch>
+        <el-form-item label="状态" :label-width="formLabelWidth" prop="status">
+          <el-input v-model="addDevice.status" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="最后上网时间" :label-width="formLabelWidth" prop="lastOnline">
+          <el-input v-model="addDevice.lastOnline" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -117,17 +145,42 @@ export default {
       devicelist: [], //设备列表
       dialogTableVisible: false, // 控制查看页面是否显示
       dialogVisible: false, // 控制添加页面是否显示
-      deviceDetail: [], // 存放单个设备数据
+      deviceDetail: [], // 存放单个设备数据--数组格式
+      reviseFormVisible: false, // 控制修改页面是否显示
       formLabelWidth: '80px',
       // 获取设备要传的参数
       queryinfo: {
         customerCodes: 'K_KCZG_COM',
         pageNumer: 1,
-        pageSize: 12
+        pageSize: 10
       },
       total: 0, // 数据总条数
-      addDeviceFormRules: {}, // 添加设备规则校验
-      addDevice: {},
+      // 添加设备规则校验
+      addDeviceFormRules: {
+        deviceCode: [
+          {required: true, message: '设备编号不能为空', trigger: 'blur'}
+        ],
+        name: [
+          {required: true, message: '设备名不能为空', trigger: 'blur'}
+        ]
+      }, 
+      // 添加设备要传的参数
+      addDevice: {
+        name: '',
+        deviceCode: '',
+        customerCode: 'K_KCZG_COM',
+        id: '',
+        type: '',
+        network: '',
+        ip: '',
+        address: '',
+        status: '',
+        lastOnline: ''
+      },
+      // 修改设备要传的参数
+      equipmentDetail: {
+
+      },
       options: [
         {
           value: '1',
@@ -183,12 +236,55 @@ export default {
       // 让数组元素始终保持一个
       this.deviceDetail.length = 1
     },
+    // 点击编辑显示修改设备对话框
+    showRevise(userinfo) {
+      this.reviseFormVisible = true
+      this.equipmentDetail = userinfo
+    },
+    // 修改设备
+    rewrite() {
+      this.$axios({
+        method: 'POST',
+        url: 'device/registerDevice',
+        params: this.deviceDetail,
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: sessionStorage.getItem('token')
+        }
+      }).then(res => {
+        if (res.status !== 200) {
+          this.$message.error('修改用户失败！')
+        }
+      })
+      this.$message.success('成功修改用户信息')
+      this.reviseFormVisible = false
+      this.getUserList()
+    },
     // 关闭添加设备对话框清空内容
     addDialogClosed() {
       this.$refs.addDeviceFormRef.resetFields()
     },
     // 添加设备点击提交函数
-    addDevices() {}
+    addDevices() {
+      this.$refs.addDeviceFormRef.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$axios({
+          method: 'POST',
+          url: 'device/add',
+          params: this.addDevice,
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: sessionStorage.getItem('token')
+          }
+        })
+        if (res.status !== 200) {
+          this.$message.error('添加设备失败！')
+        }
+        this.$message.success('已成功添加设备！')
+        this.dialogVisible = false
+        this.getDeviceList()
+      })
+    }
   }
 }
 </script>

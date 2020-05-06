@@ -135,11 +135,16 @@
         <el-form-item label="姓名">
           <el-input v-model="personalDetail.name" auto-complete="off" placeholder="请输入用户名"></el-input>
         </el-form-item>
-         <el-form-item label="ID" prop="id">
+        <el-form-item label="ID" prop="id">
           <el-input v-model="personalDetail.id" ref="roleId" disabled></el-input>
         </el-form-item>
         <el-form-item label="账号">
-          <el-input v-model="personalDetail.userCode" auto-complete="off" disabled placeholder="请设置账号"></el-input>
+          <el-input
+            v-model="personalDetail.userCode"
+            auto-complete="off"
+            disabled
+            placeholder="请设置账号"
+          ></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
           <el-input
@@ -168,7 +173,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-       
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="reviseFormVisible = false">取消</el-button>
@@ -301,14 +305,8 @@ export default {
       // 修改用户
       personalDetail: {
         id: 15,
-        // role: '2',
-        // name: '',
-        // nickName: '',
-        // status: '',
-        // lock: '',
-        userCode: 'dqc',
-        // customerCode: 'K_KCZG_COM',
-        // pwd: ''
+        role: '',
+        userCode: 'dqc'
       },
       // 获取用户数据要传的参数
       queryinfo: {
@@ -356,7 +354,7 @@ export default {
 
     // 添加用户
     addUser() {
-      this.dialogVisible = true
+      // this.dialogVisible = true
       this.$refs.addUserFormRef.validate(async valid => {
         if (!valid) return
         const { data: res } = await this.$axios({
