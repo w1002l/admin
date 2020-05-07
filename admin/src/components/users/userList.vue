@@ -7,11 +7,19 @@
     </el-breadcrumb>
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-      <el-form :inline="true">
+      <el-form :inline="true" :model="queryinfo">
         <el-form-item>
-          <el-input placeholder="公司/用户名称"></el-input>
+          <el-input v-model="queryinfo.name" placeholder="用户姓名（选填）"></el-input>
         </el-form-item>
-        <el-select v-model="roleValue" placeholder="选择角色" style="width: 120px;">
+        <el-form-item>
+          <el-input v-model="queryinfo.customerName" placeholder="公司名称（选填）"></el-input>
+        </el-form-item>
+        <el-select
+          v-model="queryinfo.roleName"
+          placeholder="选择角色"
+          style="width: 120px;"
+          @change="searchSelectRole"
+        >
           <el-option
             v-for="item in rolelist"
             :key="item.id"
@@ -20,7 +28,10 @@
           ></el-option>
         </el-select>&nbsp;
         <el-form-item>
-          <el-button type="primary" @click="searchUser">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="searchUser">查询</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="clearSearch">清空</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="dialogVisible = true">添加成员</el-button>
@@ -84,7 +95,7 @@
           <el-input v-model="addForm.customerName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="角色" :label-width="formLabelWidth">
-          <el-select v-model="value123" placeholder="选择角色" @change="selectRole">
+          <el-select v-model="addForm.roleName" placeholder="选择角色" @change="addSelectRole">
             <el-option
               v-for="item in rolelist"
               :key="item.id"
@@ -198,7 +209,6 @@ export default {
     return {
       userlist: [], // 存放用户列表数组
       userDetail: [], // 存放单个用户数据
-      roleValue: '',
       addFormVisible: false, // 控制新增页面是否显示
       reviseFormVisible: false, // 控制编辑页面是否显示
       dialogVisible: false,
@@ -206,7 +216,6 @@ export default {
       switchValue: true,
       defaultTime: '',
       dialogTableVisible: false, // 控制查看页面是否显示
-      value123: '',
       rolelist: [
         {
           id: '1',
@@ -314,7 +323,8 @@ export default {
         pageNumer: 1,
         pageSize: 10,
         name: '',
-        role: ''
+        role: '',
+        roleName: ''
       },
       total: 0 // 总数据条目
     }
@@ -366,7 +376,7 @@ export default {
             authorization: sessionStorage.getItem('token')
           }
         })
-        if (res.status !== 200) {
+        if (res.status != 200) {
           this.$message.error('添加用户失败！')
         }
         this.$message.success('添加用户成功！')
@@ -375,14 +385,23 @@ export default {
       })
     },
     // 获取下拉列表选中的值
-    selectRole(val) {
+    searchSelectRole(val) {
       var obj = {}
       obj = this.rolelist.find(item => {
         return item.value === val
       })
       // 把角色id赋给role
+      this.queryinfo.roleName = obj.value
+      this.queryinfo.role = obj.id
+    },
+    addSelectRole(val) {
+      var obj = {}
+      obj = this.rolelist.find(item => {
+        return item.value === val
+      })
+      // 把角色id赋给role
+      this.addForm.roleName = obj.value
       this.addForm.role = obj.id
-      console.log(this.addForm.role)
     },
     // 关闭添加对话框清空内容
     addDialogClosed() {
@@ -405,7 +424,7 @@ export default {
           authorization: sessionStorage.getItem('token')
         }
       }).then(res => {
-        if (res.status !== 200) {
+        if (res.status != 200) {
           this.$message.error('修改用户失败！')
         }
       })
@@ -422,9 +441,22 @@ export default {
       // 让数组元素始终保持一个
       this.userDetail.length = 1
     },
-
     // 查询
-    searchUser() {}
+    searchUser() {
+      this.getUserList()
+    },
+    // 清空查询文本框值，重新渲染列表
+    clearSearch() {
+      this.queryinfo = {
+        customerCodes: 'K_KCZG_COM',
+        pageNumer: 1,
+        pageSize: 10,
+        name: '',
+        role: '',
+        roleName: ''
+      },
+      this.getUserList()
+    }
   }
 }
 </script>
